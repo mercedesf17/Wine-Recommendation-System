@@ -139,7 +139,8 @@ for aroma in tastes_aromas_selected:
 body_features = ["body_light", "body_medium", "body_full"]
 
 for body in body_selected:
-    features_dict[body_features[body_selected.index[body]]] = 1
+    features_dict[body_features[body_selected.index(body)]] = 1
+
 
 col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for more space to the left of the button
 with col3:
