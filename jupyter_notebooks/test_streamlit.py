@@ -40,7 +40,8 @@ elif st.session_state.page == 'details':
     col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for more space to the left of the button
     with col3:
         if st.button('Get Recommendations', key='get_recommendations'):
-            st.session_state.page = 'choice'
+            #st.session_state.page = 'choice'
+            pass
 
     # Tastes/aromas selection in two parallel columns
     st.write("Select Preferred Taste and Aromas :")
