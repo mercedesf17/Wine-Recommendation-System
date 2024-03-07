@@ -63,23 +63,23 @@ elif st.session_state.page == 'details':
     # Textures selection in two parallel columns
 
     st.write("Select Preferred Textures :")
-    textures_aromas_options = ["Light", "Medium", "Fulll"]
+    textures_aromas_options = ["Light", "Medium", "Full"]
     col1, col2 = st.columns(2)  # Create two columns
-    textures_aromas_selected = []
+    body_selected = []
 
     # Distribute checkboxes across two columns
     for i, option in enumerate(textures_aromas_options):
         if i % 2 == 0:
             with col1:
                 if st.checkbox(option, key=option + "1"):
-                    textures_aromas_selected.append(option)
+                    body_selected.append(option)
         else:
             with col2:
                 if st.checkbox(option, key=option + "2"):
-                    textures_aromas_selected.append(option)
+                    body_selected.append(option)
 
-    if textures_aromas_selected:
-        st.write("You selected:", ", ".join(textures_aromas_selected))
+    if body_selected:
+        st.write("You selected:", ", ".join(body_selected))
     else:
         st.write("No textures selected")
 
@@ -94,10 +94,10 @@ elif st.session_state.page == 'details':
     st.write(f"You selected: {selected_country}")
 
     # Button to change wine type, wider appearance through column manipulation
-    col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for more space to the left of the button
-    with col3:
-        if st.button('Change Wine Type', key='change_wine'):
-            st.session_state.page = 'choice'
+    #col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for more space to the left of the button
+    #with col3:
+        #if st.button('Change Wine Type', key='change_wine'):
+            #st.session_state.page = 'choice'
 
 # Creating a dictionary for our input dataframe
 features_dict = {'dry_wine': 0,
@@ -128,8 +128,30 @@ aroma_features = ['fruity_aroma', 'spicy_aroma', 'oak_aroma', 'herb_aroma', 'cho
 for aroma in tastes_aromas_selected:
     features_dict[aroma_features[tastes_aromas_selected.index[aroma]]] = 1
 
+body_features = ["body_light", "body_medium", "body_full"]
+
+for body in body_selected:
+    features_dict[body_features[body_selected.index[body]]] = 1
+
+
 # Saving our features as a one-row dataframe
 X_test = pd.DataFrame(features_dict)
 
 # Loading our pickle file
-model = pickle.load(open('../data/model.pkl', 'rb'))
+if st.button('Get Recommendations', key='get_recommendations'):
+    model = pickle.load(open('model.pkl', 'rb'))
+    expanded_df = pd.read_csv('data/expanded_dataframe.csv')
+
+
+    neighbors_indices = model.kneighbors(X_test, n_neighbors=15, return_distance=False)[0]
+
+# Get the recommended wines based on the neighbors' indices
+    recommendations = expanded_df.loc[neighbors_indices, 'index']
+
+# Display the recommendations
+    st.write("Recommended Wines:")
+    st.write(recommendations)
+
+
+if st.button('Change Wine Type', key='change_wine'):
+    st.session_state.page = 'choice'
