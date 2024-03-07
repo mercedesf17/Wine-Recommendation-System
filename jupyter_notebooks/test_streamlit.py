@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import pickle
+import time
+
 
 # Initialize session state for navigation and wine type selection
 if 'page' not in st.session_state:
@@ -37,9 +39,10 @@ if st.session_state.page == 'choice':
 
 elif st.session_state.page == 'details':
     st.markdown(f"## **You selected {st.session_state.wine_type}**!")
+    button_key = f'get_recommendations_{time.time()}'
     col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for more space to the left of the button
     with col3:
-        if st.button('Get Recommendations', key='get_recommendations'):
+        if st.button('Get Recommendations', key=button_key):
             #st.session_state.page = 'choice'
             pass
 
