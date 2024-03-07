@@ -133,7 +133,6 @@ features_dict['wine_type'] = wine_type_new
 aroma_features = ['fruity_aroma', 'spicy_aroma', 'oak_aroma', 'herb_aroma', 'chocolate_aroma', 'floral_aroma']
 
 for aroma in tastes_aromas_selected:
-    features_dict[aroma_features[tastes_aromas_selected.index[aroma]]] = 1
     features_dict[aroma_features[tastes_aromas_selected.index(aroma)]] = 1
 
 
