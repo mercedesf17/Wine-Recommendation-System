@@ -44,59 +44,59 @@ elif st.session_state.page == 'details':
             pass
 
     # Tastes/aromas selection in two parallel columns
-    st.write("Select Preferred Taste and Aromas :")
-    tastes_aromas_options = ["Fruity", "Spicy", "Oaky", "Herbal", "Chocolate and Coffee", "Floral"]
-    col1, col2 = st.columns(2)  # Create two columns
-    tastes_aromas_selected = []
+st.write("Select Preferred Taste and Aromas :")
+tastes_aromas_options = ["Fruity", "Spicy", "Oaky", "Herbal", "Chocolate and Coffee", "Floral"]
+col1, col2 = st.columns(2)  # Create two columns
+tastes_aromas_selected = []
 
     # Distribute checkboxes across two columns
-    for i, option in enumerate(tastes_aromas_options):
-        if i % 2 == 0:
-            with col1:
-                if st.checkbox(option, key=option + "1"):
-                    tastes_aromas_selected.append(option)
-        else:
-            with col2:
-                if st.checkbox(option, key=option + "2"):
-                    tastes_aromas_selected.append(option)
-
-    if tastes_aromas_selected:
-        st.write("You selected:", ", ".join(tastes_aromas_selected))
+for i, option in enumerate(tastes_aromas_options):
+    if i % 2 == 0:
+        with col1:
+            if st.checkbox(option, key=option + "1"):
+                tastes_aromas_selected.append(option)
     else:
-        st.write("No tastes or aromas selected")
+        with col2:
+            if st.checkbox(option, key=option + "2"):
+                tastes_aromas_selected.append(option)
+
+if tastes_aromas_selected:
+    st.write("You selected:", ", ".join(tastes_aromas_selected))
+else:
+    st.write("No tastes or aromas selected")
 
     # Textures selection in two parallel columns
 
-    st.write("Select Preferred Textures :")
-    textures_aromas_options = ["Light", "Medium", "Full"]
-    col1, col2 = st.columns(2)  # Create two columns
-    body_selected = []
+st.write("Select Preferred Textures :")
+textures_aromas_options = ["Light", "Medium", "Full"]
+col1, col2 = st.columns(2)  # Create two columns
+body_selected = []
 
     # Distribute checkboxes across two columns
-    for i, option in enumerate(textures_aromas_options):
-        if i % 2 == 0:
-            with col1:
-                if st.checkbox(option, key=option + "1"):
+for i, option in enumerate(textures_aromas_options):
+    if i % 2 == 0:
+        with col1:
+            if st.checkbox(option, key=option + "1"):
                     body_selected.append(option)
-        else:
-            with col2:
-                if st.checkbox(option, key=option + "2"):
-                    body_selected.append(option)
-
-    if body_selected:
-        st.write("You selected:", ", ".join(body_selected))
     else:
-        st.write("No textures selected")
+        with col2:
+            if st.checkbox(option, key=option + "2"):
+                body_selected.append(option)
+
+if body_selected:
+    st.write("You selected:", ", ".join(body_selected))
+else:
+    st.write("No textures selected")
 
     # Price range slider
-    st.write("Select Your Price Range:")
-    price_range = st.slider("Price Range ($)", 0, 200, (10, 100))
-    st.write(f"Your selected price range: ${price_range[0]} - ${price_range[1]}")
+st.write("Select Your Price Range:")
+price_range = st.slider("Price Range ($)", 0, 200, (10, 100))
+st.write(f"Your selected price range: ${price_range[0]} - ${price_range[1]}")
 
     # Country selector
-    countries = ["Argentina", "Australia", "Chile", "France", "Germany", "Italy", "New Zealand", "Portugal", "South Africa", "Spain", "United States"]
-    selected_country = st.selectbox("Select Country:", countries)
-    st.write(f"You selected: {selected_country}")
+countries = ["Argentina", "Australia", "Chile", "France", "Germany", "Italy", "New Zealand", "Portugal", "South Africa", "Spain", "United States"]
+selected_country = st.selectbox("Select Country:", countries)
+st.write(f"You selected: {selected_country}")
 
     # Button to change wine type, wider appearance through column manipulation
     #col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for more space to the left of the button
