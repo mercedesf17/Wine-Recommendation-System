@@ -37,6 +37,10 @@ if st.session_state.page == 'choice':
 
 elif st.session_state.page == 'details':
     st.markdown(f"## **You selected {st.session_state.wine_type}**!")
+    col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for more space to the left of the button
+    with col3:
+        if st.button('Get Recommendations', key='get_recommendations'):
+            st.session_state.page = 'choice'
 
     # Tastes/aromas selection in two parallel columns
     st.write("Select Preferred Taste and Aromas :")
@@ -148,7 +152,7 @@ if st.button('Get Recommendations', key='get_recommendations'):
     neighbors_indices = model.kneighbors(X_test, n_neighbors=15, return_distance=False)[0]
 
     # Get the recommended wines based on the neighbors' indices
-    recommendations = expanded_df.loc[neighbors_indices, 'wine_name']  # Adjust 'wine_name' with the actual column name
+    recommendations = expanded_df.loc[neighbors_indices, 'title']  # Adjust 'wine_name' with the actual column name
 
     # Display the recommendations
     st.write("Recommended Wines:")
