@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import pickle
 import time
+import os
 
 
 # Initialize session state for navigation and wine type selection
@@ -145,22 +146,25 @@ for body in body_selected:
     features_dict[body_features[body_selected.index(body)]] = 1
 
 
+expanded_df = pd.read_csv('data/expanded_dataframe.csv')
+
+
 col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for more space to the left of the button
 with col3:
 
     if st.button('Get Recommendations', key='get_recommendations'):
-     model = pickle.load(open('model.pkl', 'rb'))
-     expanded_df = pd.read_csv('data/expanded_dataframe.csv')
+        model_path = os.path.abspath('model.pkl')
+        model = pickle.load(open(model_path, 'rb'))
 
     # Creating a DataFrame for the input features
-     X_test = pd.DataFrame(features_dict, index=[0])
+        X_test = pd.DataFrame(features_dict, index=[0])
 
     # Get the indices of nearest neighbors
-     neighbors_indices = model.kneighbors(X_test, n_neighbors=15, return_distance=False)[0]
+        neighbors_indices = model.kneighbors(X_test, n_neighbors=15, return_distance=False)[0]
 
     # Get the recommended wines based on the neighbors' indices
-     recommendations = expanded_df.loc[neighbors_indices, 'title']  # Adjust 'wine_name' with the actual column name
+        recommendations = expanded_df.loc[neighbors_indices, 'title']  # Adjust 'wine_name' with the actual column name
 
     # Display the recommendations
-     st.write("Recommended Wines:")
-     st.write(recommendations)
+        st.write("Recommended Wines:")
+        st.write(recommendations)
