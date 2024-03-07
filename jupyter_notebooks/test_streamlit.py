@@ -48,9 +48,9 @@ elif st.session_state.page == 'details':
             #pass
 
     # Tastes/aromas selection in two parallel columns
-    st.write("Select Preferred Taste and Aromas :")
-    tastes_aromas_options = ["Fruity", "Spicy", "Oaky", "Herbal", "Chocolate and Coffee", "Floral"]
-    col1, col2 = st.columns(2)  # Create two columns
+st.write("Select Preferred Taste and Aromas :")
+tastes_aromas_options = ["Fruity", "Spicy", "Oaky", "Herbal", "Chocolate and Coffee", "Floral"]
+col1, col2 = st.columns(2)  # Create two columns
 tastes_aromas_selected = []
 
     # Distribute checkboxes across two columns
