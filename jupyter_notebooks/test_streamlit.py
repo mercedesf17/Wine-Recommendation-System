@@ -10,16 +10,15 @@ if 'wine_type' not in st.session_state:
 
 # Background and style modifications
 st.markdown("""
-<style>
-.stApp {
-    background-image: url("https://c8.alamy.com/comp/BRW6EM/a-young-boy-sips-red-wine-from-a-wine-glass-BRW6EM.jpg");
-    background-size: cover;
-}
-.sidebar .sidebar-content {
-    background-color: #f0f2f6;
-}
-</style>
-""", unsafe_allow_html=True)
+    <style>
+        .stApp {
+            background-color: #FF69B4;  /* Pink background color */
+        }
+        .sidebar .sidebar-content {
+            background-color: #f0f2f6;
+        }
+    </style>
+    """, unsafe_allow_html=True)
 
 # Page navigation and content rendering
 if st.session_state.page == 'choice':
