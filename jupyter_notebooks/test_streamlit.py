@@ -35,8 +35,8 @@ if st.session_state.page == 'choice':
     )
     st.session_state.wine_type = wine_type
 
-    if st.button('Show Aromas and Countries'):
-        st.session_state.page = 'details'
+    #if st.button('Show Aromas and Countries'):
+        #st.session_state.page = 'details'
 
 elif st.session_state.page == 'details':
     st.markdown(f"## **You selected {st.session_state.wine_type}**!")
