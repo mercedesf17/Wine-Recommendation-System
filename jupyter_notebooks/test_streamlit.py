@@ -40,17 +40,17 @@ if st.session_state.page == 'choice':
 
 elif st.session_state.page == 'details':
     st.markdown(f"## **You selected {st.session_state.wine_type}**!")
-    button_key = f'get_recommendations_{time.time()}'
-    col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for more space to the left of the button
-    with col3:
-        if st.button('Get Recommendations', key=button_key):
+    #button_key = f'get_recommendations_{time.time()}'
+    #col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for more space to the left of the button
+    #with col3:
+        #if st.button('Get Recommendations', key=button_key):
             #st.session_state.page = 'choice'
-            pass
+            #pass
 
     # Tastes/aromas selection in two parallel columns
-st.write("Select Preferred Taste and Aromas :")
-tastes_aromas_options = ["Fruity", "Spicy", "Oaky", "Herbal", "Chocolate and Coffee", "Floral"]
-col1, col2 = st.columns(2)  # Create two columns
+    st.write("Select Preferred Taste and Aromas :")
+    tastes_aromas_options = ["Fruity", "Spicy", "Oaky", "Herbal", "Chocolate and Coffee", "Floral"]
+    col1, col2 = st.columns(2)  # Create two columns
 tastes_aromas_selected = []
 
     # Distribute checkboxes across two columns
@@ -71,7 +71,7 @@ else:
 
     # Textures selection in two parallel columns
 
-st.write("Select Preferred Textures :")
+st.write("Select Preferred Body :")
 textures_aromas_options = ["Light", "Medium", "Full"]
 col1, col2 = st.columns(2)  # Create two columns
 body_selected = []
