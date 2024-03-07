@@ -146,7 +146,8 @@ for body in body_selected:
     features_dict[body_features[body_selected.index(body)]] = 1
 
 
-expanded_df = pd.read_csv('data/expanded_dataframe.csv')
+data_path = os.path.abspath('data/expanded_dataframe.csv')
+expanded_df = pd.read_csv(data_path)
 
 
 col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for more space to the left of the button
