@@ -155,7 +155,7 @@ col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for m
 with col3:
 
     if st.button('Get Recommendations', key='get_recommendations'):
-        model_path = os.path.abspath('model.pkl')
+        model_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'model.pkl')
         model = pickle.load(open(model_path, 'rb'))
 
     # Creating a DataFrame for the input features
