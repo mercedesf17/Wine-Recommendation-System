@@ -146,7 +146,7 @@ for body in body_selected:
     features_dict[body_features[body_selected.index(body)]] = 1
 
 
-data_path = os.path.abspath('data/expanded_dataframe.csv')
+data_path = os.path.abspath('expanded_dataframe.csv')
 expanded_df = pd.read_csv(data_path)
 
 
