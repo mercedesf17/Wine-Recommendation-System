@@ -129,31 +129,27 @@ aroma_features = ['fruity_aroma', 'spicy_aroma', 'oak_aroma', 'herb_aroma', 'cho
 
 for aroma in tastes_aromas_selected:
     features_dict[aroma_features[tastes_aromas_selected.index[aroma]]] = 1
+    features_dict[aroma_features[tastes_aromas_selected.index(aroma)]] = 1
+
 
 body_features = ["body_light", "body_medium", "body_full"]
 
 for body in body_selected:
     features_dict[body_features[body_selected.index[body]]] = 1
 
-
-# Saving our features as a one-row dataframe
-X_test = pd.DataFrame(features_dict)
-
-# Loading our pickle file
 if st.button('Get Recommendations', key='get_recommendations'):
     model = pickle.load(open('model.pkl', 'rb'))
     expanded_df = pd.read_csv('data/expanded_dataframe.csv')
 
+    # Creating a DataFrame for the input features
+    X_test = pd.DataFrame(features_dict, index=[0])
 
+    # Get the indices of nearest neighbors
     neighbors_indices = model.kneighbors(X_test, n_neighbors=15, return_distance=False)[0]
 
-# Get the recommended wines based on the neighbors' indices
-    recommendations = expanded_df.loc[neighbors_indices, 'index']
+    # Get the recommended wines based on the neighbors' indices
+    recommendations = expanded_df.loc[neighbors_indices, 'wine_name']  # Adjust 'wine_name' with the actual column name
 
-# Display the recommendations
+    # Display the recommendations
     st.write("Recommended Wines:")
     st.write(recommendations)
-
-
-if st.button('Change Wine Type', key='change_wine'):
-    st.session_state.page = 'choice'
