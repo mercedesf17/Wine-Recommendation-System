@@ -119,19 +119,18 @@ features_dict = {'dry_wine': 0,
                  'floral_aroma': 0,
                  'body_light': 0,
                  'body_medium': 0,
-                 'body_full': 0,
-                 'wine_type': 'red'} # Default value is red wine
+                 'body_full': 0} # Default value is red wine
 
 
 # Mapping wine types to the corresponding values in the dataset
-wine_type = st.session_state.wine_type if 'wine_type' in st.session_state else 'Red Wine'
-wine_dict = {'Red Wine': 'red',
-             'White Wine': 'white',
-             'Rosé Wine': 'rose',
-             'Sparkling Wine': 'sparkling',
-             'Dessert Wine': 'dessert'}
-wine_type_new =  wine_dict.get(wine_type, 'red')
-features_dict['wine_type'] = wine_type_new
+#wine_type = st.session_state.wine_type if 'wine_type' in st.session_state else 'Red Wine'
+#wine_dict = {'Red Wine': 'red',
+            # 'White Wine': 'white',
+             #'Rosé Wine': 'rose',
+            # 'Sparkling Wine': 'sparkling',
+             #'Dessert Wine': 'dessert'}
+#wine_type_new =  wine_dict.get(wine_type, 'red')
+#features_dict['wine_type'] = wine_type_new
 
 # Changing aroma values to 1 if they appear in tastes_aromas_selected
 aroma_features = ['fruity_aroma', 'spicy_aroma', 'oak_aroma', 'herb_aroma', 'chocolate_aroma', 'floral_aroma']
