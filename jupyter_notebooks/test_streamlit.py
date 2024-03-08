@@ -150,7 +150,7 @@ data_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'ex
 # Read the CSV file
 expanded_df = pd.read_csv(data_path)
 
-col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for more space to the left of the button
+col1, col2, col3 = st.columns([1, 4, 1])  # Adjust the middle column width for more space to the left of the button
 with col3:
 
     if st.button('Get Recommendations', key='get_recommendations'):
