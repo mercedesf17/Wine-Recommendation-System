@@ -150,8 +150,8 @@ data_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'ex
 # Read the CSV file
 expanded_df = pd.read_csv(data_path)
 
-col1, col2, col3 = st.columns([1, 4, 1])  # Adjust the middle column width for more space to the left of the button
-with col3:
+col1, col2, col3, col4 = st.columns([1, 1, 2, 1])  # Adjust the middle column width for more space to the left of the button
+with col4:
 
     if st.button('Get Recommendations', key='get_recommendations'):
         model_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'model.pkl')
@@ -168,4 +168,4 @@ with col3:
 
     # Display the recommendations
         st.write("Recommended Wines:")
-        st.write(recommendations)
+        st.write(recommendations, use_container_width=True)
