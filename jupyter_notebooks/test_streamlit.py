@@ -167,5 +167,6 @@ with col4:
         recommendations = expanded_df.loc[neighbors_indices, 'title']  # Adjust 'wine_name' with the actual column name
 
     # Display the recommendations
-        st.write("Recommended Wines:")
-        st.write(recommendations, use_container_width=True)
+        with st.beta_container(width=800):  # Adjust the width as needed
+            st.write("Recommended Wines:")
+            st.write(recommendations)
