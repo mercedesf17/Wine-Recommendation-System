@@ -4,8 +4,8 @@ import plotly.graph_objects as go
 
 import pandas as pd
 
-from wine.models import *
-from wine.dataframing import *
+from models import *
+from dataframing import *
 
 
 # Initialize session state for navigation and wine type selection
