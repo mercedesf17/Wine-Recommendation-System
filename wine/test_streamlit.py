@@ -49,6 +49,28 @@ elif st.session_state.page == 'details':
             #st.session_state.page = 'choice'
             #pass
 
+    # Dryness selection in two parallel columns
+st.write("Select Preferred Dryness:")
+dryness_options = ['Sweet', 'Dry']
+col1, col2 = st.columns(2)  # Create two columns
+dryness_selected = []
+
+    # Distribute checkboxes across two columns
+for i, option in enumerate(dryness_options):
+    if i % 2 == 0:
+        with col1:
+            if st.checkbox(option, key=option + "1"):
+                dryness_selected.append(option)
+    else:
+        with col2:
+            if st.checkbox(option, key=option + "2"):
+                dryness_selected.append(option)
+
+if dryness_selected:
+    st.write("You selected:", ", ".join(dryness_selected))
+else:
+    st.write("No dryness selected")
+
     # Tastes/aromas selection in two parallel columns
 st.write("Select Preferred Taste and Aromas :")
 tastes_aromas_options = ["Fruity", "Spicy", "Oaky", "Herbal", "Chocolate and Coffee", "Floral"]
