@@ -1,19 +1,9 @@
 import pandas as pd
-import numpy as np
 
 from sklearn.neighbors import KNeighborsRegressor
 
-#import pickle
-
+# Importing the wine data
 df = pd.read_csv('data/final_dataframe.csv')
-
-country_dict = {'Portugal': 1, 'Spain': 2, 'France': 3, 'Germany': 4, 'Austria': 5,
-                'Italy': 6, 'Greece': 7, 'Israel': 8, 'South Africa': 9, 'Australia': 10,
-                'New Zealand': 11, 'Chile': 12, 'Argentina': 13, 'US': 14, 'Canada': 15}
-
-df['encoded_country'] = df['country'].map(country_dict)
-
-#model = pickle.load(open('data/model.pkl', 'rb'))
 
 def filtered_rows(prince_range: tuple,
                 wine_type: str):
@@ -63,7 +53,3 @@ def describe(X: pd.DataFrame):
         descriptions.append(line_1 +'\n'+ line_2 +'\n'+ line_3 +'\n'+ line_4 +'\n'+ line_5)
 
     return descriptions
-# Train model and save it as a pickle file
-# When we want to use the model we can just load it from the pickle file
-# That way we don't need to load and train model every time we want to use it
-# And here we just keep neighbors() and match_type() and describe()
