@@ -1,2 +1,6 @@
 raw_data/
 .DS_Store
+
+notebooks/keys_notebook.py
+
+wine/keys.py
