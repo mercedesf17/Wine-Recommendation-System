@@ -6,7 +6,7 @@ from sklearn.neighbors import KNeighborsRegressor
 df = pd.read_csv('data/final_dataframe.csv')
 
 def filtered_rows(prince_range: tuple,
-                wine_type: str):
+                wine_type: str) -> pd.DataFrame:
     '''Returns the rows that match the price range and wine type'''
     filtered = df[df['price'].between(prince_range[0], prince_range[1]) & (df['wine_type'] == wine_type)]
 
@@ -28,7 +28,7 @@ def train_model(X: pd.DataFrame):
 
 def neighbors(model,
               filtered: pd.DataFrame,
-              X: pd.DataFrame):
+              X: pd.DataFrame) -> pd.DataFrame:
     '''Returns the 15 nearest neighbors to the input data'''
     # Question: Do we want to add the cosine similarity?
 
@@ -38,18 +38,18 @@ def neighbors(model,
 
     return filtered.iloc[indices]
 
-def describe(X: pd.DataFrame):
+def describe(X: pd.DataFrame) -> list:
     '''Returns the decriptions of the wines from the input data'''
     descriptions = []
 
     for i in range(len(X)):
-        line_1 = f'Recommendation {i+1}: \n'
+        #line_1 = f'Recommendation {i+1}: \n'
         line_2 = f"{X.iloc[i]['title']}\n"
         line_3 = f"Price: ${X.iloc[i]['price']}\n"
         line_4 = (f'''This wine is a {X.iloc[i]['variety']} from
                              {X.iloc[i]['province']}, {X.iloc[i]['country']}\n''')
         line_5 = X.iloc[i]['description']+'\n'+('_'*150)
 
-        descriptions.append(line_1 +'\n'+ line_2 +'\n'+ line_3 +'\n'+ line_4 +'\n'+ line_5)
+        descriptions.append([line_2, line_3, line_4, line_5])
 
     return descriptions
