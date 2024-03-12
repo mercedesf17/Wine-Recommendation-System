@@ -74,7 +74,7 @@ elif st.session_state.page == 'flavors':
         align-items: center;
         justify-content: center;
         font-size: 30px;
-        gap: 20rem;
+        gap: 10rem;
     }
     </style>""",
     unsafe_allow_html=True)
@@ -279,7 +279,47 @@ elif st.session_state.page == 'recommendations':
                 in the price range of ${price_range[0]} - ${price_range[1]}\
                     </h4>", unsafe_allow_html=True)
 
+    # Gets the country of a wine and returns an emoji flag
+    def emoji_flag(df: pd.DataFrame) -> str:
+        '''Takes a single row of a DataFrame as input and returns the emoji flag
+        of the rows country'''
+        flags_dict = {'US': '🇺🇸',
+                      'France': '🇫🇷',
+                      'Italy': '🇮🇹',
+                      'Spain': '🇪🇸',
+                      'Portugal': '🇵🇹',
+                      'Chile': '🇨🇱',
+                      'Argentina': '🇦🇷',
+                      'Austria': '🇦🇹',
+                      'Australia': '🇦🇺',
+                      'Germany': '🇩🇪',
+                      'New Zealand': '🇳🇿',
+                      'South Africa': '🇿🇦',
+                      'Israel': '🇮🇱',
+                      'Greece': '🇬🇷',
+                      'Canada': '🇨🇦'}
+
+        country = df['country']
+        flag = flags_dict[country]
+
+        return flag
+
+    # Returns a digit as an emoji
+    def emoji_num(n: int) -> str:
+        '''Takes a number as input and returns the corresponding emoji'''
+        emoji_nums = {0: '0️⃣', 1: '1️⃣', 2: '2️⃣', 3: '3️⃣', 4: '4️⃣',
+                      5: '5️⃣', 6: '6️⃣', 7: '7️⃣', 8: '8️⃣', 9: '9️⃣'}
+        num = emoji_nums[n]
+
+        return num
+
     # Display the recommendations and the map
     st.markdown("<h3 style = 'text-align: center; color: black;'>Recommended Wines:</h3>", unsafe_allow_html=True)
-    st.write('\n'.join(descriptions))
+    for i in range(len(descriptions)):
+        with st.expander(f"Recommendation {emoji_num(i+1)} {emoji_flag(recommendations.iloc[i])}"):
+            st.write(f"<h4 style = 'txt-align: center; color: black;'>{descriptions[i][0]}</h5>", unsafe_allow_html=True)
+            st.write(f"<h5 style = 'txt-align: left; color: black;'>{descriptions[i][1]}</h5>", unsafe_allow_html=True)
+            st.write(f"<h5 style = 'txt-align: right; color: black;'>{descriptions[i][2]}</h5>", unsafe_allow_html=True)
+            st.write(descriptions[i][3])
+    #st.write('\n'.join(descriptions))
     st.plotly_chart(plotly_map(recommendations))
