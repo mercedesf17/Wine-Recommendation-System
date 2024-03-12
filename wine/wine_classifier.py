@@ -1,6 +1,21 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+from streamlit_mic_recorder import mic_recorder
+import openai
+from keys import api_key
+
+client = openai.OpenAI(api_key=api_key)
+
+wine_options = ['red wine', 'white wine', 'rosé wine', 'sparkling wine', 'dessert wine']
+flavor_options = ["fruity","spicy", "oaky", "herbal", "chocolate and coffee", "earthy and mineral"]
+body_options2 = ["light bodied", "medium bodied", "full bodied"]
+sweetness_options2 = ["dry", "balanced", "sweet"]
+countries = ["us", "france", "italy", "spain", "portugal", "chile", "argentina", "austria",
+        "australia", "germany", "new zealand", "south africa", "israel", "greece", "canada"]
+wine_embeddings = wine_options + flavor_options + body_options2 + sweetness_options2 + countries
+
+
 
 # Initialize session state for navigation and wine type selection
 if 'page' not in st.session_state:
@@ -27,14 +42,16 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Define regions with their corresponding countries
-
+def callback():
+    if 'my_recorder_output' in st.session_state:
+        audio_bytes = st.session_state.my_recorder_output['bytes']
+        if audio_bytes:
+            st.audio(audio_bytes, format='audio/mp3')
 
 # Page navigation and content rendering
 if st.session_state.page == 'choice':
     st.title('Hello Streamlit!')
     st.write('This is a simple Streamlit app.')
-
 
     wine_type = st.radio(
         "Select Wine Type:",
@@ -43,8 +60,33 @@ if st.session_state.page == 'choice':
     )
     st.session_state.wine_type = wine_type
 
-    if st.button('Show Options'):
-        st.session_state.page = 'details'
+    # Correctly instantiate the mic_recorder component once with all necessary parameters
+    mic_recorder(
+        key='my_recorder',
+        callback=callback,
+        start_prompt="Start recording",
+        stop_prompt="Stop recording",
+        just_once=False,
+        use_container_width=False
+    )
+
+    prompt = st.chat_input("Please enter your wine preference: Flavors; Aromas; Regions; Sweetness, etc.")
+    if prompt:
+        st.write(f"Fetching the best wine for you... # {prompt}")
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": f"Given a list of user input characteristics such as wine types, flavors, and countries, map each to the nearest option in our predefined lists, ensuring to strictly adhere to the list for countries. If the user's input includes a country not on our list, like Russia, do not include it in the response. Instead, provide the closest geographical or stylistic relative from the list without defaulting to incorrect or unlisted countries. Use the following lists for mapping: {wine_embeddings}. Return the mapping results in a sentence like 'Based on our database, here is our suggested wine:' followed by the specific characteristics, ensuring country accuracy."
+},
+                {"role": "user", "content": prompt},
+            ],
+            max_tokens=150)
+        generated_text = response.choices[0].message.content
+
+        st.write(generated_text)
+
+
+
 
 
 
