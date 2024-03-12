@@ -1,11 +1,18 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-from streamlit_mic_recorder import mic_recorder
 import openai
+from openai import OpenAI
+import io
+import dotenv
+import os
+
+from streamlit_mic_recorder import mic_recorder
 from keys import api_key
 
 client = openai.OpenAI(api_key=api_key)
+
+### This is for the LLM model
 
 wine_options = ['red wine', 'white wine', 'rosé wine', 'sparkling wine', 'dessert wine']
 flavor_options = ["fruity","spicy", "oaky", "herbal", "chocolate and coffee", "earthy and mineral"]
@@ -14,6 +21,66 @@ sweetness_options2 = ["dry", "balanced", "sweet"]
 countries = ["us", "france", "italy", "spain", "portugal", "chile", "argentina", "austria",
         "australia", "germany", "new zealand", "south africa", "israel", "greece", "canada"]
 wine_embeddings = wine_options + flavor_options + body_options2 + sweetness_options2 + countries
+
+### This is for the the audio recording module
+#def callback():
+    #if 'my_recorder_output' in st.session_state:
+        #audio_bytes = st.session_state.my_recorder_output['bytes']
+        #if audio_bytes:
+            #st.audio(audio_bytes, format='audio/mp3')
+
+# This is for the speech to text module of Whisper Function
+
+def whisper_stt(openai_api_key=None, start_prompt="Start recording", stop_prompt="Stop recording", just_once=False,
+               use_container_width=False, language=None, callback=None, args=(), kwargs=None, key=None):
+    if not 'openai_client' in st.session_state:
+        dotenv.load_dotenv()
+        st.session_state.openai_client = OpenAI(api_key=openai_api_key or os.getenv('OPENAI_API_KEY'))
+    if not '_last_speech_to_text_transcript_id' in st.session_state:
+        st.session_state._last_speech_to_text_transcript_id = 0
+    if not '_last_speech_to_text_transcript' in st.session_state:
+        st.session_state._last_speech_to_text_transcript = None
+    if key and not key + '_output' in st.session_state:
+        st.session_state[key + '_output'] = None
+    audio = mic_recorder(start_prompt=start_prompt, stop_prompt=stop_prompt, just_once=just_once,
+                         use_container_width=use_container_width, key=key)
+    new_output = False
+    if audio is None:
+        output = None
+    else:
+        id = audio['id']
+        new_output = (id > st.session_state._last_speech_to_text_transcript_id)
+        if new_output:
+            output = None
+            st.session_state._last_speech_to_text_transcript_id = id
+            audio_bio = io.BytesIO(audio['bytes'])
+            audio_bio.name = 'audio.mp3'
+            success = False
+            err = 0
+            while not success and err < 3:  # Retry up to 3 times in case of OpenAI server error.
+                try:
+                    transcript = st.session_state.openai_client.audio.transcriptions.create(
+                        model="whisper-1",
+                        file=audio_bio,
+                        language=language
+                    )
+                except Exception as e:
+                    print(str(e))  # log the exception in the terminal
+                    err += 1
+                else:
+                    success = True
+                    output = transcript.text
+                    st.session_state._last_speech_to_text_transcript = output
+        elif not just_once:
+            output = st.session_state._last_speech_to_text_transcript
+        else:
+            output = None
+
+    if key:
+        st.session_state[key + '_output'] = output
+    if new_output and callback:
+        callback(*args, **(kwargs or {}))
+    return output
 
 
 
@@ -42,12 +109,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-def callback():
-    if 'my_recorder_output' in st.session_state:
-        audio_bytes = st.session_state.my_recorder_output['bytes']
-        if audio_bytes:
-            st.audio(audio_bytes, format='audio/mp3')
-
 # Page navigation and content rendering
 if st.session_state.page == 'choice':
     st.title('Hello Streamlit!')
@@ -61,14 +122,21 @@ if st.session_state.page == 'choice':
     st.session_state.wine_type = wine_type
 
     # Correctly instantiate the mic_recorder component once with all necessary parameters
-    mic_recorder(
-        key='my_recorder',
-        callback=callback,
-        start_prompt="Start recording",
-        stop_prompt="Stop recording",
-        just_once=False,
-        use_container_width=False
-    )
+    #mic_recorder(
+        #key='my_recorder',
+        #callback=callback,
+        #start_prompt="Start recording",
+        #stop_prompt="Stop recording",
+        #just_once=False,
+        #use_container_width=False
+    #)
+
+    text = whisper_stt(
+    openai_api_key=api_key, language = 'en')
+    if text:
+        st.write(text)
+
+    ### This chat function that connects is for the LLM model
 
     prompt = st.chat_input("Please enter your wine preference: Flavors; Aromas; Regions; Sweetness, etc.")
     if prompt:
