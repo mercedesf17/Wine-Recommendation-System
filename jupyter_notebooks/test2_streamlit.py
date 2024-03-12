@@ -6,6 +6,9 @@ import pandas as pd
 
 from models import *
 from dataframing import *
+from math import radians, cos, sin, asin, sqrt
+import pydeck as pdk
+
 
 
 # Initialize session state for navigation and wine type selection
@@ -14,20 +17,31 @@ if 'page' not in st.session_state:
 
 # Background and style modifications
 st.markdown("""
-    <style>
-        .stApp {
-            background-color: #fcb1b9;  /* Pink background color */
-        }
-        .sidebar .sidebar-content {
-            background-color: #fcb1b9;
-        }
-    </style>
-    """, unsafe_allow_html=True)
+        <style>
+            .stApp {
+                background-image: url("https://i.imgur.com/fUHxmyW.png");
+                background-size: cover;
+            }
+            .sidebar .sidebar-content {
+    background-color: #f0f2f6;
+}
+.sidebar .sidebar-content {
+    background-color: #f0f2f6;
+}
+.content-area, .block-container {
+    background-color: rgba(2, 2, 0, 0.35); /* Semi-transparent black */
+    color: white; /* Adjust text color to improve readability */
+    padding: 250px; /* Some padding for aesthetics */
+    border-radius: 10px; /* Optional: rounded corners for the box */
+}
+</style>
+""", unsafe_allow_html=True)
+
 
 # Title page
 if st.session_state.page == 'begin':
-    st.markdown("<h1 style = 'text-align: center; color: black;'> Wine Whisperer</h1>", unsafe_allow_html=True)
-    st.markdown("<h2 style = 'text-align: center; color: black;'> Unveiling Flavorful Secrets 🍷🍇</h2>", unsafe_allow_html=True)
+    st.markdown("<h1 style = 'text-align: center; color: white; font-family: Domino;'> Wine Whisperer</h1>", unsafe_allow_html=True)
+    st.markdown("<h2 style = 'text-align: center; color: white; font-family: Domino;'> Unveiling Flavorful Secrets 🍷🍇</h2>", unsafe_allow_html=True)
 
     col1, col2, col3, col4, col5 = st.columns(5)
 
@@ -35,18 +49,23 @@ if st.session_state.page == 'begin':
         if st.button('Begin 🥂'):
             st.session_state.page = 'choice'
 
+
 # First page, choosing wine type
 elif st.session_state.page == 'choice':
-    st.markdown("<h3 style = 'text-align: center; color: black;'> Please select your preferred wine type:</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style = 'text-align: center; color: white;'> Please select your preferred wine type:</h3>", unsafe_allow_html=True)
 
     st.markdown("""
     <style>
-    .stRadio [role=radiogroup]{
-        align-items: center;
-        justify-content: center;
-    }
+        .stRadio [role=radiogroup]{
+            align-items: center;
+            justify-content: center;
+        }
+        .stRadio input[type="radio"] + label {
+            color: white !important;
+        }
     </style>
-""",unsafe_allow_html=True)
+""", unsafe_allow_html=True)
+
 
     wine_type = st.radio(
         label = "Select Wine Type:",
@@ -64,9 +83,9 @@ elif st.session_state.page == 'choice':
 
 # Second page for flavor profiles
 elif st.session_state.page == 'flavors':
-    st.markdown(f"<h3 style = 'text-align: center; color: black;'> You selected: {st.session_state.wine_type}!</h3> ", unsafe_allow_html=True)
+    st.markdown(f"<h3 style = 'text-align: center; color: white;'> You selected: {st.session_state.wine_type}!</h3> ", unsafe_allow_html=True)
 
-    st.markdown("<h3 style = 'text-align: center; color: black;'> Please select your preferred flavor and texture profile:</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style = 'text-align: center; color: white;'> Please select your preferred flavor and texture profile:</h3>", unsafe_allow_html=True)
 
     # Dryness options as a radio button
     st.markdown("""<style>
@@ -74,17 +93,26 @@ elif st.session_state.page == 'flavors':
         align-items: center;
         justify-content: center;
         font-size: 30px;
-        gap: 20rem;
+        color: white
+        gap: 10rem;
     }
     </style>""",
     unsafe_allow_html=True)
+
+
+    text_color = "#ffffff"  # Change this to the desired text color
+
 
     dryness_selected = st.radio(
         label = 'Please select your preferred dryness:',
         options = ('Dry', 'Sweet'),
         index = None,
         horizontal = True
-    )
+        )
+
+    text_style = f'<style>div.stRadio label span {{ color: {text_color}; }}</style>'
+    st.markdown(text_style, unsafe_allow_html=True)
+
     st.session_state.dryness_selected = dryness_selected
 
     if dryness_selected:
@@ -147,7 +175,7 @@ elif st.session_state.page == 'flavors':
 
 elif st.session_state.page == 'price':
     # Price range slider
-    st.markdown("<h3 style = 'text-align: center; color: black;'> Please select your preferred price range (in USD):</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style = 'text-align: center; color: white;'> Please select your preferred price range (in USD):</h3>", unsafe_allow_html=True)
 
     price_range = st.slider(label = "Price Range ($)",
                             min_value = 0,
@@ -170,16 +198,11 @@ elif st.session_state.page == 'country':
     countries = ["Portugal", "Spain", "France", "Germany", "Austria",
                 "Italy", "Greece", "Israel", "South Africa", "Australia",
                 "New Zealand", "Chile", "Argentina", "US", "Canada"]
-    selected_country = st.selectbox("Select Country:", countries)
+    st.markdown("<h3 style = 'text-align: center; color: white;'>Please select a preferred country:</h3>", unsafe_allow_html=True)
+    selected_country = st.selectbox("Select Country",countries)
     st.write(f"You selected: {selected_country}")
 
     st.session_state.selected_country = selected_country
-
-    # Button to change wine type, wider appearance through column manipulation
-    #col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for more space to the left of the button
-    #with col3:
-        #if st.button('Change Wine Type', key='change_wine'):
-            #st.session_state.page = 'choice'
 
 
     # Mapping wine types to the corresponding values in the dataset
@@ -230,7 +253,7 @@ elif st.session_state.page == 'country':
             st.session_state.page = 'loading'
 
 elif st.session_state.page == 'loading':
-    st.markdown("<h3 style = 'text-align: center; color: black;'>Our wine whisperer is searching... Stay tuned!</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style = 'text-align: center; color: white;'>Our wine whisperer is searching... Stay tuned!</h3>", unsafe_allow_html=True)
     st.image('data/hello catherine.png')
 
     col1, col2, col3, col4, col5 = st.columns([1, 1, 3, 1, 1])
@@ -244,26 +267,89 @@ elif st.session_state.page == 'recommendations':
     descriptions = st.session_state.descriptions
 
     # Mapping function
-    def plotly_map(X: pd.DataFrame):
-        '''Initiates a map of the world with the wines from the input data'''
-        fig = go.Figure(go.Scattergeo(lon = X['lon'],
-                                    lat = X['lat'],
-                                    text = X[['rank', 'region', 'province']],
-                                    marker_size = 8,
-                                    marker_color = '#c90076'))
+    def haversine(lon1, lat1, lon2, lat2):
+        """
+        Calculate the great-circle distance between two points on the Earth's surface.
+        """
+    # Convert decimal degrees to radians
+        lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
 
-        fig.update_geos(projection_type="natural earth",
-                    showcountries = True,
-                    showsubunits = True,
-                    bgcolor = '#fcb1b9',
-                    lakecolor = '#fcb1b9',
-                    landcolor = '#fcb1b9')
+    # Haversine formula
+        dlon = lon2 - lon1
+        dlat = lat2 - lat1
+        a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+        c = 2 * asin(sqrt(a))
+        r = 6371  # Radius of Earth in kilometers
+        distance = c * r
 
-        fig.update_layout(height=400, margin={"r":0,"t":0,"l":0,"b":0})
-        fig.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)',
-                    'paper_bgcolor': 'rgba(0, 0, 0, 0)'})
+        return distance
 
-        return fig
+    def calculate_zoom_level(lon_range, lat_range, width, height, max_zoom=4):
+
+        """
+        Calculate the appropriate zoom level based on the haversine distance and map dimensions.
+        """
+        max_lon_distance = haversine(lon_range[0], lat_range[0], lon_range[1], lat_range[0])
+        max_lat_distance = haversine(lon_range[0], lat_range[0], lon_range[0], lat_range[1])
+
+        if max_lon_distance == 0 or max_lat_distance == 0:
+        # Handle the case where distances are zero to avoid division by zero
+            return max_zoom
+
+    # Adjust these factors based on your preference
+        zoom_x_factor = 0.3
+        zoom_y_factor = 0.3
+
+        additional_zoom_factor = 0.5  # Experiment with different values
+
+
+
+    # Assume that the screen width corresponds to 256 pixels at zoom level 1
+        screen_width = 256
+        zoom_x = (360 * (width / screen_width)) / (max_lon_distance * zoom_x_factor)
+        zoom_y = (170 * (height / screen_width)) / (max_lat_distance * zoom_y_factor)
+
+    # Use the minimum zoom level to fit both x and y directions
+        zoom_level = min(zoom_x, zoom_y)
+        zoom_level = min(zoom_level, max_zoom)
+
+        return zoom_level
+
+    def animated_map(X: pd.DataFrame):
+    # Calculate the bounding box
+        lon_range = [X['lon'].min(), X['lon'].max()]
+        lat_range = [X['lat'].min(), X['lat'].max()]
+
+    # Calculate the appropriate zoom level
+        zoom_level = calculate_zoom_level(lon_range, lat_range, 800, 600)  # Adjust map dimensions as needed
+
+    # Create a PyDeck scatter plot layer
+        scatter_layer = pdk.Layer(
+            "ScatterplotLayer",
+            data=X,
+            get_position=['lon', 'lat'],
+            get_radius=50000,
+            get_fill_color=[187, 19, 47, 160],  # RGBA color with alpha transparency
+            pickable=True,
+            auto_highlight=True
+        )
+
+    # Create a PyDeck deck with the scatter plot layer
+        deck = pdk.Deck(
+            map_style='mapbox://styles/mapbox/satellite-v9',
+            initial_view_state=pdk.ViewState(
+                latitude=(lat_range[0] + lat_range[1]) / 2,
+                longitude=(lon_range[0] + lon_range[1]) / 2,
+                zoom=zoom_level,
+                pitch=0
+            ),
+            layers=[scatter_layer],
+            tooltip={'text': '{rank}, {region}, {province}'}
+        )
+
+    # Display the PyDeck deck
+        st.pydeck_chart(deck)
+
 
     # Show the choices
     dryness_selected = st.session_state.dryness_selected.lower() if st.session_state.dryness_selected else ''
@@ -273,13 +359,53 @@ elif st.session_state.page == 'recommendations':
     selected_country = st.session_state.selected_country if 'selected_country' in st.session_state else 'Portugal'
     price_range = st.session_state.price_range if 'price_range' in st.session_state else (10, 100)
 
-    st.markdown(f"<h4 style = 'text-align: center; color: black;'>\
+    st.markdown(f"<h4 style = 'text-align: center; color: white;'>\
         You chose a {dryness_selected} {wine_type} \
             {tastes_aromas_selected} {body_selected} from {selected_country}\
                 in the price range of ${price_range[0]} - ${price_range[1]}\
                     </h4>", unsafe_allow_html=True)
 
+    # Gets the country of a wine and returns an emoji flag
+    def emoji_flag(df: pd.DataFrame) -> str:
+        '''Takes a single row of a DataFrame as input and returns the emoji flag
+        of the rows country'''
+        flags_dict = {'US': '🇺🇸',
+                      'France': '🇫🇷',
+                      'Italy': '🇮🇹',
+                      'Spain': '🇪🇸',
+                      'Portugal': '🇵🇹',
+                      'Chile': '🇨🇱',
+                      'Argentina': '🇦🇷',
+                      'Austria': '🇦🇹',
+                      'Australia': '🇦🇺',
+                      'Germany': '🇩🇪',
+                      'New Zealand': '🇳🇿',
+                      'South Africa': '🇿🇦',
+                      'Israel': '🇮🇱',
+                      'Greece': '🇬🇷',
+                      'Canada': '🇨🇦'}
+
+        country = df['country']
+        flag = flags_dict[country]
+
+        return flag
+
+    # Returns a digit as an emoji
+    def emoji_num(n: int) -> str:
+        '''Takes a number as input and returns the corresponding emoji'''
+        emoji_nums = {0: '0️⃣', 1: '1️⃣', 2: '2️⃣', 3: '3️⃣', 4: '4️⃣',
+                      5: '5️⃣', 6: '6️⃣', 7: '7️⃣', 8: '8️⃣', 9: '9️⃣'}
+        num = emoji_nums[n]
+
+        return num
+
     # Display the recommendations and the map
-    st.markdown("<h3 style = 'text-align: center; color: black;'>Recommended Wines:</h3>", unsafe_allow_html=True)
-    st.write('\n'.join(descriptions))
-    st.plotly_chart(plotly_map(recommendations))
+    st.markdown("<h3 style = 'text-align: center; color:white;'>Recommended Wines:</h3>", unsafe_allow_html=True)
+    for i in range(len(descriptions)):
+        with st.expander(f"Recommendation {emoji_num(i+1)} {emoji_flag(recommendations.iloc[i])}"):
+            st.write(f"<h4 style = 'txt-align: center; color: white;'>{descriptions[i][0]}</h5>", unsafe_allow_html=True)
+            st.write(f"<h5 style = 'txt-align: left; color: white;'>{descriptions[i][1]}</h5>", unsafe_allow_html=True)
+            st.write(f"<h5 style = 'txt-align: right; color: black;'>{descriptions[i][2]}</h5>", unsafe_allow_html=True)
+            st.write(descriptions[i][3])
+    #st.write('\n'.join(descriptions))
+    animated_map(recommendations)
