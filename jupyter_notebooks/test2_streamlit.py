@@ -22,46 +22,65 @@ st.markdown("""
                 background-image: url("https://i.imgur.com/fUHxmyW.png");
                 background-size: cover;
             }
-            .sidebar .sidebar-content {
-    background-color: #f0f2f6;
-}
-.sidebar .sidebar-content {
-    background-color: #f0f2f6;
-}
-.content-area, .block-container {
-    background-color: rgba(2, 2, 0, 0.35); /* Semi-transparent black */
-    color: white; /* Adjust text color to improve readability */
-    padding: 250px; /* Some padding for aesthetics */
-    border-radius: 10px; /* Optional: rounded corners for the box */
-}
+            .content-area, .block-container {
+                background-color: rgba(2, 2, 0, 0.65); /* Semi-transparent black */
+                color: white; /* Adjust text color to improve readability */
+            }
+            .st-bq {
+                color: white;
+            }
+            .st-be {
+                background-color: rgb(250, 170, 186)
+            }
+            .st-eq {
+                background-color: rgb(250, 170, 186)
+            }
+            .st-emotion-cache-2n7b7j {
+                background: rgb(250, 170, 186)
+            }
+            .st-emotion-cache-l9bjmx p {
+                font-size: 20px;
+            }
 </style>
 """, unsafe_allow_html=True)
 
 
 # Title page
 if st.session_state.page == 'begin':
-    st.markdown("<h1 style = 'text-align: center; color: white; font-family: Domino;'> Wine Whisperer</h1>", unsafe_allow_html=True)
-    st.markdown("<h2 style = 'text-align: center; color: white; font-family: Domino;'> Unveiling Flavorful Secrets 🍷🍇</h2>", unsafe_allow_html=True)
+    st.markdown("""
+        <div style='display: flex; flex-direction: column; justify-content: flex-start; align-items: center; height: 60vh; margin-top: 140px;'>
+            <h1 style='text-align: center; color: white; font-family: Domino;'>Wine Whisperer</h1>
+            <h2 style='text-align: center; color: white; font-family: Snell Roundhand, cursive;'>Unveiling Flavorful Secrets 🍷🍇</h2>
+        </div>
+    """, unsafe_allow_html=True)
 
-    col1, col2, col3, col4, col5 = st.columns(5)
 
-    with col3:
-        if st.button('Begin 🥂'):
-            st.session_state.page = 'choice'
+    # Adding a button to start the process
+    st.markdown("""
+        <style>
+        div.stButton {text-align:center; color: black; margin-top: -160px;}
+        </style>
+    """, unsafe_allow_html=True)
+    button = st.button('Begin 🥂')
 
+    if button:
+        st.session_state.page = 'choice'
+        st.experimental_rerun()
 
 # First page, choosing wine type
 elif st.session_state.page == 'choice':
-    st.markdown("<h3 style = 'text-align: center; color: white;'> Please select your preferred wine type:</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style = 'text-align: center; color: white; height: 10vh; margin-top: 180px;'> Please select your preferred wine type:</h3>", unsafe_allow_html=True)
 
+    # Adding a radio button to select the wine type
     st.markdown("""
     <style>
-        .stRadio [role=radiogroup]{
+        .stRadio [role=radiogroup] + label {
             align-items: center;
             justify-content: center;
+            color: white;margin-top: -1000px;
         }
         .stRadio input[type="radio"] + label {
-            color: white !important;
+            color: white; margin-top: 1000px;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -75,11 +94,16 @@ elif st.session_state.page == 'choice':
         horizontal = True)
     st.session_state.wine_type = wine_type
 
-    col1, col2, col3, col4, col5 = st.columns(5)
+    # Adding a button to continue to next page
+    st.markdown("""
+                <style>
+                div.stButton {text-align:center; color: black; margin-top: 50px}
+                </style>""", unsafe_allow_html=True)
+    button = st.button('Continue 🥂')
 
-    with col3:
-        if st.button('Continue 🥂'):
+    if button:
             st.session_state.page = 'flavors'
+            st.experimental_rerun()
 
 # Second page for flavor profiles
 elif st.session_state.page == 'flavors':
@@ -89,12 +113,16 @@ elif st.session_state.page == 'flavors':
 
     # Dryness options as a radio button
     st.markdown("""<style>
-    .stRadio [role=radiogroup]{
+    .stRadio [role=radiogroup] {
         align-items: center;
         justify-content: center;
         font-size: 30px;
-        color: white
+        font-color: white;
         gap: 10rem;
+    }
+    .stRadio label {
+        size: 35px;
+        color: white;
     }
     </style>""",
     unsafe_allow_html=True)
@@ -167,30 +195,50 @@ elif st.session_state.page == 'flavors':
         st.write("No body selected")
     st.session_state.body_selected = body_selected
 
-    col1, col2, col3, col4, col5 = st.columns(5)
+    # Adding a button to continue to next page
+    st.markdown("""
+                <style>
+                div.stButton {text-align:center; color: black}
+                </style>""", unsafe_allow_html=True)
+    button = st.button('Continue 🍾')
 
-    with col3:
-        if st.button('Continue 🍾'):
-            st.session_state.page = 'price'
+    if button:
+        st.session_state.page = 'price'
+        st.experimental_rerun()
 
 elif st.session_state.page == 'price':
     # Price range slider
-    st.markdown("<h3 style = 'text-align: center; color: white;'> Please select your preferred price range (in USD):</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style = 'text-align: center; color: white; height: 40vh; margin-top: 135px;'> Please select your preferred price range (in USD):</h3>", unsafe_allow_html=True)
+
+    st.markdown("""
+                <style>
+                div.stSlider label {
+                    text-align: center;
+                    font-size: 30px;
+                    color: white;
+                    margin-top: -200px}
+                </style>""", unsafe_allow_html=True)
 
     price_range = st.slider(label = "Price Range ($)",
                             min_value = 0,
                             max_value = 200,
                             value = (10, 100))
 
-    st.write(f"Your selected price range is: \${price_range[0]} - \${price_range[1]}")
+    st.write(f"<div style='margin-top: -70px;'>Your selected price range is: ${price_range[0]} - ${price_range[1]}</div>", unsafe_allow_html=True)
+
 
     st.session_state.price_range = price_range
 
-    col1, col2, col3, col4, col5 = st.columns(5)
+    # Adding a button to continue to next page
+    st.markdown("""
+                <style>
+                div.stButton {text-align:center; color: black; margin-top: -50px;}
+                </style>""", unsafe_allow_html=True)
+    button = st.button('Continue 🍷')
 
-    with col3:
-        if st.button("Continue 🍷"):
-            st.session_state.page = 'country'
+    if button:
+        st.session_state.page = 'country'
+        st.experimental_rerun()
 
 elif st.session_state.page == 'country':
 
@@ -198,7 +246,21 @@ elif st.session_state.page == 'country':
     countries = ["Portugal", "Spain", "France", "Germany", "Austria",
                 "Italy", "Greece", "Israel", "South Africa", "Australia",
                 "New Zealand", "Chile", "Argentina", "US", "Canada"]
-    st.markdown("<h3 style = 'text-align: center; color: white;'>Please select a preferred country:</h3>", unsafe_allow_html=True)
+
+    st.markdown("<h3 style = 'text-align: center; color: white;height: 20vh; margin-top: 100px;'>Please select a preferred country:</h3>", unsafe_allow_html=True)
+
+    st.markdown("""
+                <style>
+                div.stSelectbox label {
+                    text-align: center;
+                    font-size: 30px;
+                    color: white}
+                div[role="listbox"] ul {
+                    background-color: black;
+                    margin-top: -700px
+                    }
+                </style>""", unsafe_allow_html=True)
+
     selected_country = st.selectbox("Select Country",countries)
     st.write(f"You selected: {selected_country}")
 
@@ -215,51 +277,57 @@ elif st.session_state.page == 'country':
     wine_type_new =  wine_dict.get(wine_type, 'red')
 
     dryness_selected = st.session_state.dryness_selected if 'dryness_selected' in st.session_state else None
-
     tastes_aromas_selected = st.session_state.tastes_aromas_selected if 'tastes_aromas_selected' in st.session_state else []
-
     body_selected = st.session_state.body_selected if 'body_selected' in st.session_state else []
-
     price_range = st.session_state.price_range if 'price_range' in st.session_state else (10, 100)
-
     selected_country = st.session_state.selected_country if 'selected_country' in st.session_state else 'Portugal'
 
-    col1, col2, col3 = st.columns([1, 2, 1])  # Adjust the middle column width for more space to the left of the button
+    # Adding a button to get recommendations
+    st.markdown("""
+                <style>
+                div.stButton {text-align:center; color: black; margin-top: 80px}
+                </style>""", unsafe_allow_html=True)
+    button = st.button('Get Recommendations 🍇')
 
-    with col2:
-
-        if st.button('Get Recommendations', key='get_recommendations'):
+    if button:
         # Updating the features dictionary
-            features_dict = update_dryness(dryness_selected)
-            features_dict = update_aromas(tastes_aromas_selected, features_dict)
-            features_dict = update_body(body_selected, features_dict)
-            features_dict = update_country(selected_country, features_dict)
+        features_dict = update_dryness(dryness_selected)
+        features_dict = update_aromas(tastes_aromas_selected, features_dict)
+        features_dict = update_body(body_selected, features_dict)
+        features_dict = update_country(selected_country, features_dict)
 
         # Creating a DataFrame for the input features
-            X_test = pd.DataFrame(features_dict, index=[0])
+        X_test = pd.DataFrame(features_dict, index=[0])
 
         # Initiating and training the model
-            filtered = filtered_rows(price_range, wine_type_new)
-            model = train_model(filtered)
+        filtered = filtered_rows(price_range, wine_type_new)
+        model = train_model(filtered)
 
         # Get the recommended wines by calling the match_type and describe functions from models
-            recommendations = neighbors(model, filtered, X_test)
-            recommendations['rank'] = range(1, len(recommendations) + 1)
-            st.session_state.recommendations = recommendations
+        recommendations = neighbors(model, filtered, X_test)
+        recommendations['rank'] = range(1, len(recommendations) + 1)
+        st.session_state.recommendations = recommendations
 
-            descriptions = describe(recommendations)
-            st.session_state.descriptions = descriptions
+        descriptions = describe(recommendations)
+        st.session_state.descriptions = descriptions
 
-            st.session_state.page = 'loading'
+        st.session_state.page = 'loading'
+        st.experimental_rerun()
 
 elif st.session_state.page == 'loading':
     st.markdown("<h3 style = 'text-align: center; color: white;'>Our wine whisperer is searching... Stay tuned!</h3>", unsafe_allow_html=True)
-    st.image('data/hello catherine.png')
+    st.image('https://i.imgur.com/XzEhm9x.png')
 
-    col1, col2, col3, col4, col5 = st.columns([1, 1, 3, 1, 1])
-    with col3:
-        if st.button('Show Recommendations 🍷'):
-            st.session_state.page = 'recommendations'
+    # Adding a button to show recommendations
+    st.markdown("""
+                <style>
+                div.stButton {text-align:center; color: black}
+                </style>""", unsafe_allow_html=True)
+    button = st.button('Show Recommendations 🍷')
+
+    if button:
+        st.session_state.page = 'recommendations'
+        st.experimental_rerun()
 
 elif st.session_state.page == 'recommendations':
 
@@ -336,7 +404,7 @@ elif st.session_state.page == 'recommendations':
 
     # Create a PyDeck deck with the scatter plot layer
         deck = pdk.Deck(
-            map_style='mapbox://styles/mapbox/satellite-v9',
+            map_style='mapbox://styles/mapbox/outdoors-v11',
             initial_view_state=pdk.ViewState(
                 latitude=(lat_range[0] + lat_range[1]) / 2,
                 longitude=(lon_range[0] + lon_range[1]) / 2,
@@ -401,11 +469,11 @@ elif st.session_state.page == 'recommendations':
 
     # Display the recommendations and the map
     st.markdown("<h3 style = 'text-align: center; color:white;'>Recommended Wines:</h3>", unsafe_allow_html=True)
+
     for i in range(len(descriptions)):
-        with st.expander(f"Recommendation {emoji_num(i+1)} {emoji_flag(recommendations.iloc[i])}"):
-            st.write(f"<h4 style = 'txt-align: center; color: white;'>{descriptions[i][0]}</h5>", unsafe_allow_html=True)
-            st.write(f"<h5 style = 'txt-align: left; color: white;'>{descriptions[i][1]}</h5>", unsafe_allow_html=True)
-            st.write(f"<h5 style = 'txt-align: right; color: black;'>{descriptions[i][2]}</h5>", unsafe_allow_html=True)
-            st.write(descriptions[i][3])
-    #st.write('\n'.join(descriptions))
+        with st.expander(f"Recommendation {emoji_num(i+1)} {emoji_flag(recommendations.iloc[i])} \n{descriptions[i][0]} "):
+            st.write(f"<h3 style='text-align: left; color:white ; font-size: 17px;'>   💸  {descriptions[i][1]}</h3>", unsafe_allow_html=True)
+            st.write(f"<h3 style = 'txt-align: right; color: white;font-size: 17px;'>   🗺️   {descriptions[i][2]}</h3>", unsafe_allow_html=True)
+            st.write(f"  🍷  {descriptions[i][3]}", unsafe_allow_html=True)
+
     animated_map(recommendations)
