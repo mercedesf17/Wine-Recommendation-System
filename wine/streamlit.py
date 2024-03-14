@@ -3,6 +3,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+import time
+
 from models import *
 from dataframing import *
 import pydeck as pdk
@@ -327,21 +329,33 @@ elif st.session_state.page == 'country':
 elif st.session_state.page == 'loading':
     st.markdown("<h3 style = 'text-align: center; color: white;'>Our wine whisperer is searching... Stay tuned!</h3>", unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([1,8,1])
-
-    with col2:
-        st.image("https://i.imgur.com/XzEhm9x.png")
-
     # Adding a button to show recommendations
     st.markdown("""
                 <style>
-                div.stButton {text-align:center; color: black}
+                div.stSpinner div {
+                    text-align: center;
+                    font-size: 30px;
+                    align-items: center;
+                    justify-content: center;}
                 </style>""", unsafe_allow_html=True)
-    button = st.button('Show Recommendations 🍷')
+
+    with st.spinner('Our wine whisperer is searching... Stay tuned! 🎀'):
+        time.sleep(2.1245)
+        st.markdown("""
+                    <style>
+                    div.stButton {text-align:center; color: black}
+                    </style>""", unsafe_allow_html=True)
+        button = st.button('Show Recommendations 🍷')
 
     if button:
         st.session_state.page = 'recommendations'
         st.experimental_rerun()
+
+    col1, col2, col3 = st.columns([1,6,1])
+
+    with col2:
+        st.image("https://i.imgur.com/XzEhm9x.png")
+
 
 elif st.session_state.page == 'recommendations':
 
