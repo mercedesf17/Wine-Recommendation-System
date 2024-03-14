@@ -48,7 +48,7 @@ def describe(X: pd.DataFrame) -> list:
         line_3 = f"Price: ${X.iloc[i]['price']}\n"
         line_4 = (f'''This wine is a {X.iloc[i]['variety']} from
                              {X.iloc[i]['province']}, {X.iloc[i]['country']}\n''')
-        line_5 = X.iloc[i]['description']+'\n'+('_'*150)
+        line_5 = X.iloc[i]['description'].split('. ')
 
         descriptions.append([line_2, line_3, line_4, line_5])
 

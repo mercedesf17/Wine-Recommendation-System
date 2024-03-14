@@ -23,7 +23,7 @@ st.markdown("""
                 background-size: cover;
             }
             .content-area, .block-container {
-                background-color: rgba(2, 2, 0, 0.65); /* Semi-transparent black */
+                background-color: rgba(2, 2, 0, 0.75); /* Semi-transparent black */
                 color: white; /* Adjust text color to improve readability */
             }
             .st-bq {
@@ -33,6 +33,9 @@ st.markdown("""
                 background-color: rgb(250, 170, 186)
             }
             .st-eq {
+                background-color: rgb(250, 170, 186)
+            }
+            .st-er {
                 background-color: rgb(250, 170, 186)
             }
             .st-emotion-cache-2n7b7j {
@@ -53,7 +56,7 @@ if st.session_state.page == 'begin':
                 Wine Whisperer </h1>", unsafe_allow_html=True)
     st.markdown("<h2 style = 'text-align: center;\
                 color: white;\
-                font-family: Trattarello, fantasy;'>\
+                font-family: Apple Chancery, crusive;'>\
                 Unveiling Flavorful Secrets 🍷🍇</h2>",
                 unsafe_allow_html=True)
 
@@ -75,7 +78,7 @@ elif st.session_state.page == 'choice':
     # Adding a radio button to select the wine type
     st.markdown("""
     <style>
-        .stRadio [role=radiogroup] + label {
+        .stRadio [role=radiogroup] {
             align-items: center;
             justify-content: center;
             color: white;
@@ -114,16 +117,14 @@ elif st.session_state.page == 'flavors':
 
     # Dryness options as a radio button
     st.markdown("""<style>
-    .stRadio [role=radiogroup]: {
+    .stRadio [role=radiogroup] {
         align-items: center;
         justify-content: center;
-        font-size: 30px;
-        font-color: white;
         gap: 10rem;
     }
     .stRadio label {
-        size: 35px;
-        color: white;
+        font-size: 20px;
+        color: #faaaba;
     }
     </style>""",
     unsafe_allow_html=True)
@@ -145,12 +146,13 @@ elif st.session_state.page == 'flavors':
     st.session_state.dryness_selected = dryness_selected
 
     if dryness_selected:
-        st.write(f"You selected: {dryness_selected}")
+        st.markdown(f"<p style = 'text-align: center;'>You selected: {dryness_selected}</p>", unsafe_allow_html=True)
     else:
-        st.write("No dryness selected")
+        st.write("<p style = 'text-align: center;'>No dryness selected</p>", unsafe_allow_html=True)
 
     # Aromas selection in two parallel columns
-    st.write("Please select your preferred aromas:")
+    st.markdown('#') #line of empty space
+    st.markdown("<span style = 'font-size: 20px; color: #faaaba'>Please select your preferred aromas:</span>", unsafe_allow_html=True)
     tastes_aromas_options = ["Fruity", "Spiced", "Oaky", "Herbal", "Chocolate and Coffee", "Floral"]
     col1, col2 = st.columns(2)  # Create two columns
     tastes_aromas_selected = []
@@ -167,33 +169,45 @@ elif st.session_state.page == 'flavors':
                     tastes_aromas_selected.append(option)
 
     if tastes_aromas_selected:
-        st.write("You selected:", ", ".join(tastes_aromas_selected))
+        st.markdown(f"<p style = 'text-align: center;'>You selected: {', '.join(tastes_aromas_selected)}</p>", unsafe_allow_html=True)
     else:
-        st.write("No tastes or aromas selected")
+        st.write("<p style = 'text-align: center;'>No tastes or aromas selected</p>", unsafe_allow_html=True)
 
     st.session_state.tastes_aromas_selected = tastes_aromas_selected
 
-    # Body selection in two parallel columns
-    st.write("Please select your preferred body:")
-    textures_aromas_options = ["Light", "Medium", "Full"]
-    col1, col2 = st.columns(2)  # Create two columns
+    # Body options as a radio button
+    st.markdown("""<style>
+    .stRadio [role=radiogroup] {
+        align-items: center;
+        justify-content: center;
+        gap: 10rem;
+    }
+    .stRadio label {
+        font-size: 20px;
+        color: #faaaba;
+    }
+    </style>""",
+    unsafe_allow_html=True)
+
     body_selected = []
 
-    # Distribute checkboxes across two columns
-    for i, option in enumerate(textures_aromas_options):
-        if i % 2 == 0:
-            with col1:
-                if st.checkbox(option, key=option + "1"):
-                        body_selected.append(option)
-        else:
-            with col2:
-                if st.checkbox(option, key=option + "2"):
-                    body_selected.append(option)
 
-    if body_selected:
-        st.write("You selected:", ", ".join(body_selected))
+    body_selected_radio = st.radio(
+        label = 'Please select your preferred body:',
+        options = ('Light', 'Medium', 'Full'),
+        index = None,
+        horizontal = True
+        )
+
+    text_style = f'<style>div.stRadio label span {{ color: {text_color}; }}</style>'
+    st.markdown(text_style, unsafe_allow_html=True)
+
+    if body_selected_radio:
+        st.write(f"<p style = 'text-align: center;'>You selected: {body_selected_radio}</p>", unsafe_allow_html=True)
+        body_selected.append(body_selected_radio)
     else:
-        st.write("No body selected")
+        st.write("<p style = 'text-align: center;'>No body selected</p>", unsafe_allow_html=True)
+
     st.session_state.body_selected = body_selected
 
     # Adding a button to continue to next page
@@ -224,7 +238,7 @@ elif st.session_state.page == 'price':
                             max_value = 200,
                             value = (10, 100))
 
-    st.write(f"Your selected price range is: \${price_range[0]} - \${price_range[1]}")
+    st.write(f"<p style = 'text-align: center;'>Your selected price range is: ${price_range[0]} - ${price_range[1]}</p>", unsafe_allow_html=True)
 
     st.session_state.price_range = price_range
 
@@ -314,7 +328,11 @@ elif st.session_state.page == 'country':
 
 elif st.session_state.page == 'loading':
     st.markdown("<h3 style = 'text-align: center; color: white;'>Our wine whisperer is searching... Stay tuned!</h3>", unsafe_allow_html=True)
-    st.image('data/hello catherine.png')
+
+    col1, col2, col3 = st.columns([1,8,1])
+
+    with col2:
+        st.image("https://i.imgur.com/XzEhm9x.png")
 
     # Adding a button to show recommendations
     st.markdown("""
@@ -332,8 +350,13 @@ elif st.session_state.page == 'recommendations':
     recommendations = st.session_state.recommendations
     descriptions = st.session_state.descriptions
 
-    # Mapping function
-    def haversine(lon1, lat1, lon2, lat2):
+    # Functions
+
+    ## Mapping functions
+
+    ### Haversine distance
+    def haversine(lon1: float, lat1: float,
+                  lon2: float, lat2: float) -> float:
         """
         Calculate the great-circle distance between two points on the Earth's surface.
         """
@@ -350,8 +373,9 @@ elif st.session_state.page == 'recommendations':
 
         return distance
 
-    def calculate_zoom_level(lon_range, lat_range, width, height, max_zoom=4):
-
+    ### Calculate zoom level
+    def calculate_zoom_level(lon_range: list, lat_range: list,
+                             width: int, height: int, max_zoom=4) -> float:
         """
         Calculate the appropriate zoom level based on the haversine distance and map dimensions.
         """
@@ -381,7 +405,10 @@ elif st.session_state.page == 'recommendations':
 
         return zoom_level
 
+    ### Plots animated map
     def animated_map(X: pd.DataFrame):
+        """Plots an animated map with the coordinated in the input dataframe
+    using pydeck """
     # Calculate the bounding box
         lon_range = [X['lon'].min(), X['lon'].max()]
         lat_range = [X['lat'].min(), X['lat'].max()]
@@ -402,7 +429,7 @@ elif st.session_state.page == 'recommendations':
 
     # Create a PyDeck deck with the scatter plot layer
         deck = pdk.Deck(
-            map_style='mapbox://styles/mapbox/satellite-v9',
+            map_style='mapbox://styles/mapbox/outdoors-v11',
             initial_view_state=pdk.ViewState(
                 latitude=(lat_range[0] + lat_range[1]) / 2,
                 longitude=(lon_range[0] + lon_range[1]) / 2,
@@ -416,22 +443,9 @@ elif st.session_state.page == 'recommendations':
     # Display the PyDeck deck
         st.pydeck_chart(deck)
 
+    ## Emojis
 
-    # Show the choices
-    dryness_selected = st.session_state.dryness_selected.lower() if st.session_state.dryness_selected else ''
-    wine_type = st.session_state.wine_type.lower() if 'wine_type' in st.session_state else 'red wine'
-    tastes_aromas_selected = 'with '+', '.join(st.session_state.tastes_aromas_selected).lower()+' aromas' if st.session_state.tastes_aromas_selected != [] else ''
-    body_selected = 'and '+', '.join(st.session_state.body_selected).lower()+' body' if st.session_state.body_selected != [] else ''
-    selected_country = st.session_state.selected_country if 'selected_country' in st.session_state else 'Portugal'
-    price_range = st.session_state.price_range if 'price_range' in st.session_state else (10, 100)
-
-    st.markdown(f"<h4 style = 'text-align: center; color: white;'>\
-        You chose a {dryness_selected} {wine_type} \
-            {tastes_aromas_selected} {body_selected} from {selected_country}\
-                in the price range of ${price_range[0]} - ${price_range[1]}\
-                    </h4>", unsafe_allow_html=True)
-
-    # Gets the country of a wine and returns an emoji flag
+    ### Gets the country of a wine and returns an emoji flag
     def emoji_flag(df: pd.DataFrame) -> str:
         '''Takes a single row of a DataFrame as input and returns the emoji flag
         of the rows country'''
@@ -456,7 +470,7 @@ elif st.session_state.page == 'recommendations':
 
         return flag
 
-    # Returns a digit as an emoji
+    ### Returns a digit as an emoji
     def emoji_num(n: int) -> str:
         '''Takes a number as input and returns the corresponding emoji'''
         emoji_nums = {0: '0️⃣', 1: '1️⃣', 2: '2️⃣', 3: '3️⃣', 4: '4️⃣',
@@ -465,13 +479,33 @@ elif st.session_state.page == 'recommendations':
 
         return num
 
+    # Show the choices
+
+    ## Turning session state choice variables into appropriate strings
+    dryness_selected = st.session_state.dryness_selected.lower() if st.session_state.dryness_selected else ''
+    wine_type = st.session_state.wine_type.lower() if 'wine_type' in st.session_state else 'red wine'
+    tastes_aromas_selected = 'with '+', '.join(st.session_state.tastes_aromas_selected).lower()+' aromas' if st.session_state.tastes_aromas_selected != [] else ''
+    body_selected = ', '.join(st.session_state.body_selected).lower()+'-bodied' if st.session_state.body_selected != [] else ''
+    selected_country = st.session_state.selected_country if 'selected_country' in st.session_state else 'Portugal'
+    price_range = st.session_state.price_range if 'price_range' in st.session_state else (10, 100)
+
+    ## Printing
+    st.markdown(f"<h4 style = 'text-align: center; color: white;'>\
+        You chose a {body_selected} {dryness_selected} {wine_type} \
+            {tastes_aromas_selected} from {selected_country}\
+                in the price range of ${price_range[0]} - ${price_range[1]}\
+                    </h4>", unsafe_allow_html=True)
+
     # Display the recommendations and the map
     st.markdown("<h3 style = 'text-align: center; color:white;'>Recommended Wines:</h3>", unsafe_allow_html=True)
+
     for i in range(len(descriptions)):
-        with st.expander(f"Recommendation {emoji_num(i+1)} {emoji_flag(recommendations.iloc[i])}"):
-            st.write(f"<h3 style = 'txt-align: center; color: white;'>{descriptions[i][0]}</h3>", unsafe_allow_html=True)
-            st.write(f"<h3 style = 'txt-align: left; color: white;'>{descriptions[i][1]}</h3>", unsafe_allow_html=True)
-            st.write(f"<h3 style = 'txt-align: right; color: white;'>{descriptions[i][2]}</h3>", unsafe_allow_html=True)
-            st.write(f"{descriptions[i][3]}", unsafe_allow_html=True)
-    #st.write('\n'.join(descriptions))
+        with st.expander(f"Recommendation {emoji_num(i+1)} {emoji_flag(recommendations.iloc[i])} \n\n{descriptions[i][0]}"):
+            st.write(f"<p style = 'text-align: left; color: white ; font-size: 20px;'><b>💸  {descriptions[i][1]}</b></p>", unsafe_allow_html=True)
+            st.write(f"<p style = 'text-align: left; color: white; font-size: 20px;'><b>🗺️   {descriptions[i][2]}</b></p>", unsafe_allow_html=True)
+            st.write("\n\n")
+            for desc in descriptions[i][3]:
+                st.write(f"<p style = 'font-size: 18px;'>🍷 {desc}\n\n</p>", unsafe_allow_html=True)
+            #st.write(f"  {'''<p style = 'font-size: 18px;'>'''+descriptions[i][3]+'''</p>'''}", unsafe_allow_html=True)
+
     animated_map(recommendations)

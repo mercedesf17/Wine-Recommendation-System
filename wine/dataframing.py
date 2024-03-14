@@ -39,10 +39,12 @@ def update_aromas(tastes_aromas_selected: list,
 def update_body(body_selected: list,
                 features_dict: dict = features_dict):
     '''Updates the body values in the features dictionary'''
-    body_features = ['body_light', 'body_medium', 'body_full']
+    body_features = {'Light': 'body_light',
+                     'Medium': 'body_medium',
+                     'Full': 'body_full'}
 
     for body in body_selected:
-        features_dict[body_features[body_selected.index(body)]] = 1
+        features_dict[body_features[body]] = 1
 
     return features_dict
 
