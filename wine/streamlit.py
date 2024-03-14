@@ -1,12 +1,10 @@
 import streamlit as st
 
-import plotly.graph_objects as go
-
 import pandas as pd
+import numpy as np
 
 from models import *
 from dataframing import *
-from math import radians, cos, sin, asin, sqrt
 import pydeck as pdk
 
 
@@ -361,13 +359,13 @@ elif st.session_state.page == 'recommendations':
         Calculate the great-circle distance between two points on the Earth's surface.
         """
     # Convert decimal degrees to radians
-        lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+        lon1, lat1, lon2, lat2 = map(np.radians, [lon1, lat1, lon2, lat2])
 
     # Haversine formula
         dlon = lon2 - lon1
         dlat = lat2 - lat1
-        a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
-        c = 2 * asin(sqrt(a))
+        a = np.sin(dlat/2)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon/2)**2
+        c = 2 * np.arcsin(np.sqrt(a))
         r = 6371  # Radius of Earth in kilometers
         distance = c * r
 
