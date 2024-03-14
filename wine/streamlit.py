@@ -56,14 +56,14 @@ if st.session_state.page == 'begin':
                 Wine Whisperer </h1>", unsafe_allow_html=True)
     st.markdown("<h2 style = 'text-align: center;\
                 color: white;\
-                font-family: Apple Chancery, crusive;'>\
+                font-family: Apple Chancery, cursive;'>\
                 Unveiling Flavorful Secrets 🍷🍇</h2>",
                 unsafe_allow_html=True)
 
     # Adding a button to start the process
     st.markdown("""
                 <style>
-                div.stButton {text-align:center; color: black}
+                div.stButton {text-align:center; color: #c40045}
                 </style>""", unsafe_allow_html=True)
     button = st.button('Begin 🥂')
 
@@ -101,7 +101,7 @@ elif st.session_state.page == 'choice':
     # Adding a button to continue to next page
     st.markdown("""
                 <style>
-                div.stButton {text-align:center; color: black}
+                div.stButton {text-align:center; color: #c40045}
                 </style>""", unsafe_allow_html=True)
     button = st.button('Continue 🥂')
 
@@ -213,7 +213,7 @@ elif st.session_state.page == 'flavors':
     # Adding a button to continue to next page
     st.markdown("""
                 <style>
-                div.stButton {text-align:center; color: black}
+                div.stButton {text-align:center; color: #c40045}
                 </style>""", unsafe_allow_html=True)
     button = st.button('Continue 🍾')
 
@@ -245,7 +245,7 @@ elif st.session_state.page == 'price':
     # Adding a button to continue to next page
     st.markdown("""
                 <style>
-                div.stButton {text-align:center; color: black}
+                div.stButton {text-align:center; color: #c40045}
                 </style>""", unsafe_allow_html=True)
     button = st.button('Continue 🍷')
 
@@ -297,7 +297,7 @@ elif st.session_state.page == 'country':
     # Adding a button to get recommendations
     st.markdown("""
                 <style>
-                div.stButton {text-align:center; color: black}
+                div.stButton {text-align:center; color: #c40045}
                 </style>""", unsafe_allow_html=True)
     button = st.button('Get Recommendations 🍇')
 
@@ -343,7 +343,7 @@ elif st.session_state.page == 'loading':
         time.sleep(2.1245)
         st.markdown("""
                     <style>
-                    div.stButton {text-align:center; color: black}
+                    div.stButton {text-align:center; color: #c40045}
                     </style>""", unsafe_allow_html=True)
         button = st.button('Show Recommendations 🍷')
 
